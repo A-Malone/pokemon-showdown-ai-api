@@ -4,10 +4,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from showdown_pokemon import ShowdownPokemon
+
 from enum import Enum
 
 #For associating players with their info
 PLAYER_ELEMS = ['leftbar', 'rightbar']
+ACTIVE_POKE_ELEMS = ['rstatbar', 'lstatbar']
 class Player(Enum):
     me = 0
     op = 1
@@ -43,14 +46,21 @@ class ShowdownBattle(object):
         xpath = "//div[@class='{}']/div[@class='trainer']/div[@class='teamicons']//span"
         poke_elems = self.root.find_elements_by_xpath(xpath.format(PLAYER_ELEMS[player.value]))
         for poke_elem in poke_elems:
-            team.append(poke_elem.get_attribute('title').replace(' (active))',''))
+            team.append(ShowdownPokemon(poke_elem.get_attribute('title')))
+        return team
 
     def get_active_pokemon(self, player):
-        pass
+        xpath = "//div[@class='statbar {}']/strong".format(ACTIVE_POKE_ELEMS[player.value])
+        poke_elem = self.root.find_element_by_xpath(xpath)
+        return ShowdownPokemon(poke_elem.text, active=True)
 
     #Actions
     def switch_pokemon(self, poke):
-        pass
+        xpath = "//button[@name='chooseSwitch'][normalize-space(text())='{}']".format(poke.name)
+        poke_button = self.root.find_element_by_xpath(xpath)
+        poke_button.click()
 
     def use_move(self, move):
-        pass
+        xpath = "//button[@name='chooseMove'][@data-move='{}']".format(move)
+        move_button = self.root.find_element_by_xpath(xpath)
+        move_button.click()

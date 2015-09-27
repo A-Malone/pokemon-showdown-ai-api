@@ -7,8 +7,6 @@ from selenium.common.exceptions import TimeoutException
 
 from showdown_battle import ShowdownBattle
 
-import time, json
-
 class ShowdownClient(object):
     """docstring for ShowdownCLient"""
 
@@ -48,7 +46,13 @@ class ShowdownClient(object):
         password_input.send_keys(password)
         password_input.submit()
 
+        #Wait until the server registers that we've logged in
+        xpath = "//div[@class='userbar']/span[@class='username']"
+        user_name_elem = WebDriverWait(self.driver, 2).until(
+            EC.presence_of_element_located((By.XPATH, xpath))
+        )
         self.username = username
+
 
     def ladder(self, format=None):
         pass
@@ -89,15 +93,3 @@ class ShowdownClient(object):
         except TimeoutException:
             print("Challenge timed out")
             return None
-
-def main():
-    client = ShowdownClient()
-    with open('config.json', 'r') as f:
-        config = json.load(f)
-    client.login(**config['login'])
-    time.sleep(2)
-    print(client.challenge('chabons'))
-
-
-if __name__ == '__main__':
-    main()
