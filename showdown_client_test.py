@@ -8,6 +8,6 @@ class Login(unittest.TestCase):
         self.client.login('fear27', 'blurnfear')
     def tearDown(self):
         pass
-
+        
 if __name__ == "__main__":
     unittest.main()

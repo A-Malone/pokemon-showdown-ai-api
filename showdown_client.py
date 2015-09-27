@@ -94,7 +94,7 @@ def main():
     with open('config.json', 'r') as f:
         config = json.load(f)
     client.login(**config['login'])
-    time.sleep(1)
+    time.sleep(2)
     print(client.challenge('chabons'))
 
 
