@@ -4,6 +4,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from selenium_utils import *
+
 from showdown_pokemon import ShowdownPokemon
 
 from enum import Enum

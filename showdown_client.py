@@ -5,6 +5,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
+from selenium_utils import *
+
 from showdown_battle import ShowdownBattle
 
 class ShowdownClient(object):
@@ -34,7 +36,8 @@ class ShowdownClient(object):
         )
         login_button.click()
 
-        username_input = WebDriverWait(self.driver, 2).until(
+        username_input = fresh_find(
+            self.driver,
             EC.presence_of_element_located((By.NAME, 'username'))
         )
         username_input.send_keys(username)
@@ -61,19 +64,23 @@ class ShowdownClient(object):
         """
         Returns the battle object for this match, or false if it is rejected
         """
-        find_user_button = WebDriverWait(self.driver, 2).until(
+        find_user_button = fresh_find(
+            self.driver,
             EC.presence_of_element_located((By.XPATH, "//button[@name='finduser']"))
         )
         find_user_button.click()
 
-        username_input = WebDriverWait(self.driver, 2).until(
+        username_input = fresh_find(
+            self.driver,
             EC.presence_of_element_located((By.XPATH, "//input[@name='data']"))
         )
         username_input.send_keys(username)
         username_input.submit()
 
-        challenge_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[@name='challenge']"))
+        challenge_button = fresh_find(
+            self.driver,
+            EC.element_to_be_clickable((By.XPATH, "//button[@name='challenge']")),
+            delay=10
         )
         challenge_button.click()
 
