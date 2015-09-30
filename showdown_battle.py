@@ -42,13 +42,16 @@ class ShowdownBattle(object):
         )
         return trainer_elem.find_element_by_tag_name('strong').text
 
-    #Game status methods
+    #----GAME STATUS
+    #------------------------------------------------------------
+
+    #----Symmetrical
     def get_team(self, player):
         team = []
         xpath = "//div[@class='{}']/div[@class='trainer']/div[@class='teamicons']//span"
         poke_elems = self.root.find_elements_by_xpath(xpath.format(PLAYER_ELEMS[player.value]))
         for poke_elem in poke_elems:
-            team.append(ShowdownPokemon(poke_elem.get_attribute('title')))
+            team.append(ShowdownPokemon.from_team_icon(poke_elem))
         return team
 
     def get_active_pokemon(self, player):
@@ -56,9 +59,14 @@ class ShowdownBattle(object):
         poke_elem = self.root.find_element_by_xpath(xpath)
         return ShowdownPokemon(poke_elem.text, active=True)
 
-    #Actions
+    #----Unilateral
+    def get_moves(self, player):
+        pass
+
+    #----GAME ACTIONS
+    #------------------------------------------------------------
     def switch_pokemon(self, poke):
-        xpath = "//button[@name='chooseSwitch'][normalize-space(text())='{}']".format(poke.name)
+        xpath = "//button[@name='chooseSwitch'][normalize-space(text())='{}']".format(poke['name'])
         poke_button = self.root.find_element_by_xpath(xpath)
         poke_button.click()
 
@@ -66,3 +74,6 @@ class ShowdownBattle(object):
         xpath = "//button[@name='chooseMove'][@data-move='{}']".format(move)
         move_button = self.root.find_element_by_xpath(xpath)
         move_button.click()
+
+    def chat(self, text):
+        pass

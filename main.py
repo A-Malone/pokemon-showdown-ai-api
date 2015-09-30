@@ -10,9 +10,13 @@ def main():
     client.login(**config['login'])
     time.sleep(1)
     battle = client.challenge('chabons')
-    team = battle.get_team(Player.me)
-    #print(team)
-    code.interact(local=locals())
+    if('battle'):
+        team = battle.get_team(Player.me)
+        #Start a terminal
+        terminal = code.InteractiveConsole(locals=locals())
+        terminal.push('from showdown_client import ShowdownClient')
+        terminal.push('from showdown_battle import ShowdownBattle, Player')
+        terminal.interact()
 
 if __name__ == '__main__':
     main()

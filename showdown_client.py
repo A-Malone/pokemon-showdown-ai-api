@@ -23,8 +23,8 @@ class ShowdownClient(object):
     def __init__(self):
         super(ShowdownClient, self).__init__()
         self.driver = webdriver.Firefox()
-        #self.driver.firefox_profile.set_preference("media.volume_scale", "0.0")
         self.driver.get(self.SERVER_URL)
+        self.mute()
 
     def __del__(self):
         self.driver.close()
@@ -56,6 +56,22 @@ class ShowdownClient(object):
         )
         self.username = username
 
+    def mute(self):
+        """ Highly necessary """
+        sound_button = fresh_find(
+            self.driver,
+            EC.element_to_be_clickable((By.XPATH, "//button[@name='openSounds']"))
+        )
+        sound_button.click()
+
+        mute_button = fresh_find(
+            self.driver,
+            EC.presence_of_element_located((By.XPATH, "//input[@name='muted']"))
+        )
+        if(not mute_button.get_attribute('checked')):
+            mute_button.click()
+        sound_button.click()
+
 
     def ladder(self, format=None):
         pass
@@ -80,7 +96,7 @@ class ShowdownClient(object):
         challenge_button = fresh_find(
             self.driver,
             EC.element_to_be_clickable((By.XPATH, "//button[@name='challenge']")),
-            delay=10
+            timeout=10
         )
         challenge_button.click()
 

@@ -3,10 +3,10 @@ from selenium.common.exceptions import StaleElementReferenceException
 
 import time
 
-def fresh_find(root, EC, delay=2, retries=10):
+def fresh_find(root, EC, timeout=2, retries=10):
     for i in range(retries):
         try:
-            elem = WebDriverWait(root, delay).until(EC)
+            elem = WebDriverWait(root, timeout).until(EC)
             elem.is_enabled()
             return elem
         except StaleElementReferenceException:
