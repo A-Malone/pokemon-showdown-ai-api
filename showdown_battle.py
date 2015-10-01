@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 
 from selenium_utils import *
 
@@ -57,11 +58,22 @@ class ShowdownBattle(object):
     def get_active_pokemon(self, player):
         xpath = "//div[@class='statbar {}']/strong".format(ACTIVE_POKE_ELEMS[player.value])
         poke_elem = self.root.find_element_by_xpath(xpath)
-        return ShowdownPokemon(poke_elem.text, active=True)
+        return ShowdownPokemon.from_team_icon(poke_elem)
 
     #----Unilateral
     def get_moves(self, player):
-        pass
+        xpath = "//div[@class='movemenu']/button"
+        button_elems = self.root.find_elements_by_xpath(xpath)
+        return [ShowdownMove.from_move_button(x) for x in button_elems]
+
+    def get_my_full_team(self):
+        xpath = "//div[@class='switchmenu']/button"
+        poke_buttons = self.root.find_elements_by_xpath(xpath)
+        pokemon = []
+        for pokemon in poke_buttons:
+            pass
+
+        #return [ShowdownPokemon.from_switch_button(x) for x in poke_buttons]
 
     #----GAME ACTIONS
     #------------------------------------------------------------
@@ -76,4 +88,7 @@ class ShowdownBattle(object):
         move_button.click()
 
     def chat(self, text):
-        pass
+        xpath = "//form[@class='chatbox']/textarea[@placeholder='']"
+        chat_form = self.root.find_element_by_xpath(xpath)
+        chat_form.send_keys(text)
+        chat_form.submit()

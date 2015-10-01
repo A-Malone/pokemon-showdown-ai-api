@@ -10,8 +10,7 @@ def main():
     client.login(**config['login'])
     time.sleep(1)
     battle = client.challenge('chabons')
-    if('battle'):
-        team = battle.get_team(Player.me)
+    if(battle):
         #Start a terminal
         terminal = code.InteractiveConsole(locals=locals())
         terminal.push('from showdown_client import ShowdownClient')
