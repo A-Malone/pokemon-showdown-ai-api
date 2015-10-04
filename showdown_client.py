@@ -112,7 +112,7 @@ class ShowdownClient(object):
                 EC.presence_of_element_located((By.XPATH, "//div[contains(@class,'ps-room')]/div[@class='battle']"))
             )
             battle_room = battle_obj.find_element_by_xpath('..')
-            return ShowdownBattle(battle_room)
+            return ShowdownBattle(self.driver, battle_room)
         except TimeoutException:
             print("Challenge timed out")
             return None

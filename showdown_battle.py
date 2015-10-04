@@ -21,13 +21,18 @@ class Player(Enum):
 class ShowdownBattle(object):
     """docstring for ShowdownBattle"""
 
+    #Elements
     root = None
+    driver = None
 
     my_user = None
     op_user = None
 
-    def __init__(self, battle_room_elem):
+    TOOLTIP_PATH = "//div[@id='tooltipwrapper']/div/div[@class='tooltip']"
+
+    def __init__(self, driver, battle_room_elem):
         super(ShowdownBattle, self).__init__()
+        self.driver = driver
         self.root = battle_room_elem
 
         self.my_user = self.get_username(Player.me)
@@ -70,8 +75,9 @@ class ShowdownBattle(object):
         xpath = "//div[@class='switchmenu']/button"
         poke_buttons = self.root.find_elements_by_xpath(xpath)
         pokemon = []
-        for pokemon in poke_buttons:
-            pass
+        for poke_button in poke_buttons:
+            ActionChains(driver).move_to_element(pokemon).perform()
+            tooltip = self.driver.find_element_by_xpath(TOOLTIP_PATH)
 
         #return [ShowdownPokemon.from_switch_button(x) for x in poke_buttons]
 
