@@ -34,9 +34,11 @@ class ShowdownPokemon(object):
         'ability':'',
         'item':'',
         'stats':[0],
+        'state':'',
         'status':['']
     }
     STATES = ['active', 'fainted']
+    STATUSES = []
 
     @classmethod
     @schema_validated
@@ -58,6 +60,8 @@ class ShowdownPokemon(object):
         #Parse data on the button
         data = button_object.get_attribute('value').split(',')
         root['name'] = data[0]
+        if(len(data) > 1):
+            root['state'] = data[1]
 
         #Parse the pop-up
         sections = pop_up.find_elements_by_tag_name('p')
