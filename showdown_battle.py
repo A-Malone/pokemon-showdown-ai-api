@@ -94,6 +94,9 @@ class ShowdownBattle(object):
         move_button = self.root.find_element_by_xpath(xpath)
         move_button.click()
 
+    def mega_evolve(self):
+        xpath = ''
+
     def chat(self, text):
         xpath = "//form[@class='chatbox']/textarea[@placeholder='']"
         chat_form = self.root.find_element_by_xpath(xpath)

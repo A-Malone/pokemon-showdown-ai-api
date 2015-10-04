@@ -51,7 +51,7 @@ class ShowdownClient(object):
 
         #Wait until the server registers that we've logged in
         xpath = "//div[@class='userbar']/span[@class='username']"
-        user_name_elem = WebDriverWait(self.driver, 2).until(
+        user_name_elem = WebDriverWait(self.driver, 3).until(
             EC.presence_of_element_located((By.XPATH, xpath))
         )
         self.username = username
