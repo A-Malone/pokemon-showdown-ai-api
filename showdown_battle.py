@@ -76,10 +76,11 @@ class ShowdownBattle(object):
         poke_buttons = self.root.find_elements_by_xpath(xpath)
         pokemon = []
         for poke_button in poke_buttons:
-            ActionChains(driver).move_to_element(pokemon).perform()
-            tooltip = self.driver.find_element_by_xpath(TOOLTIP_PATH)
+            ActionChains(self.driver).move_to_element(poke_button).perform()
+            tooltip = self.driver.find_element_by_xpath(self.TOOLTIP_PATH)
+            pokemon.append(ShowdownPokemon.from_pop_up(poke_button, tooltip))
 
-        #return [ShowdownPokemon.from_switch_button(x) for x in poke_buttons]
+        return pokemon
 
     #----GAME ACTIONS
     #------------------------------------------------------------

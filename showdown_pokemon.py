@@ -17,9 +17,10 @@ def recursive_check(schema, data):
 
 
 def schema_validated(func):
-    def inner(*args):
-        ret_val = func(*args)
+    def inner(f_cls, *args):
+        ret_val = func(f_cls, *args)
         recursive_check(f_cls.schema, ret_val)
+        return ret_val
     return inner
 
 #----CLASSES
@@ -32,8 +33,8 @@ class ShowdownPokemon(object):
         'maxhp':0,
         'ability':'',
         'item':'',
-        'stats':[],
-        'status':[]
+        'stats':[0],
+        'status':['']
     }
     STATES = ['active', 'fainted']
 
@@ -57,24 +58,32 @@ class ShowdownPokemon(object):
         #Parse data on the button
         data = button_object.get_attribute('value').split(',')
         root['name'] = data[0]
-        for state in cls.STATES:
-            if(data == state))):
-                root['status'].append(data)
-                break
 
         #Parse the pop-up
         sections = pop_up.find_elements_by_tag_name('p')
 
+        #Parse status
+        root['stats'] = []
+        statuses = sections[0].find_elements_by_tag_name('span')
+        for status in statuses:
+            root['stats'].append(status.text)
+
         #Parse HP
         hp_string = sections[0].text
-        hp, max_hp = re.find(hp_string, r'\d+/(\d+|undefined)').split('/')
-        root['hp'] = int(hp)
-        root['max_hp'] = int(max_hp)
-
+        hp_data = re.findall(r'\d+/(?:\d+|undefined)', hp_string)[0].split('/')
+        root['hp'] = int(hp_data[0])
+        root['max_hp'] = int(hp_data[1])
 
         ability_string = sections[1].text
+        root['ability'] = ability_string.split(': ')[-1]
+
         item_string = sections[2].text
+        root['item'] = item_string.split(': ')[-1]
+
         stats_string = sections[3].text
+        root['stats'] = [int(x) for x in re.findall(stats_string, r'\d+')]
+
+        return root
 
 class ShowdownMove(object):
     """A class to get dict representations of move from PS"""
